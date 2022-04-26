@@ -1,0 +1,77 @@
+version: '3.5'
+services:
+  app:
+    build: .
+    # image: carbongyroscope.azurecr.io/carbongyroscope-starling:alpha
+    env_file:
+      - ./config/app.env
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - POSTGRES_URI=postgresql://postgres:5432
+      - DATABASE_HOST=postgres
+      - MONGO_URI="mongodb://root:example@mongo:27017/carbonGyroscope?authSource=admin"
+      - MONGODB_DATABASE=carbonGyroscope
+      - MONGODB_USERNAME=root
+      - MONGODB_PASSWORD=example
+      - MONGODB_HOSTNAME=mongodb
+      - CACHE_REDIS_PORT=6379
+      - CACHE_REDIS_DB=0
+      - CACHE_REDIS_URL=redis://redis:6379/0
+      - IN_DOCKER=True
+    ports:
+      - "5000:5000"
+    secrets:
+      - secret_variables
+      - private_pem
+      - public_pem
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+
+
+  postgres:
+    image: postgres:12-bullseye
+    restart: always
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 4s
+      timeout: 2s
+      retries: 5
+
+
+  mongo:
+    image: bitnami/mongodb
+    restart: always
+    environment:
+      - MONGO_INIT_ROOT_USERNAME=root
+      - MONGO_INIT_ROOT_PASSWORD=example
+    ports:
+     - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      interval: 4s
+      timeout: 2s
+      retries: 5
+      start_period: 40s
+
+  redis:
+    image: redis:6-bullseye
+    ports:
+      - "6379:6379"
+
+
+secrets:
+  secret_variables:
+    file: ./.sensitive/secrets.json
+  private_pem:
+    file: ./.sensitive/private.pem
+  public_pem:
+    file: ./.sensitive/public.pem

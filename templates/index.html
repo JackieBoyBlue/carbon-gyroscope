@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Header -->
+<section id="header" class="about">
+    <div style="background-color: #330066; height: 70px;"></div>
+    <div class="container-fluid" style="background-image: linear-gradient(#330066, #fff); height: 700px;">
+        <div class="container justify-content-end text-end text-white position-relative">
+            <h3 class="display-1">Balancing carbon<br>the easy way</h3>
+            <div class="div" style="position: absolute; right: 0px; z-index: 1;">
+                <p class="text-white lead mt-5">• Sign up</p>
+                <p class="text-white lead">• Allow access to your Starling account</p>
+                <p class="text-white lead">• Get your transaction data</p>
+                <p class="text-white lead">• Offset your carbon footprint</p>
+                <a class="btn btn-rounded btn-success mt-5" href="/#getting-started">Get started</a>
+            </div>
+        </div>
+        <div class="container">
+            <img src="../static/images/gyroscope.svg" height="300" style="max-width: 70%; z-index: 0; position: absolute; top: 450px;">
+        </div>
+    </div>
+</section>
+<!-- End header -->
+<!-- About us -->
+<section id="mission-statement" class="about container">
+    <h3 class="display-2 text-center">Avoid, reduce, <b>offset</b>.</h3>
+    <h5 class="display-6 text-center text-muted fst-italic">We're here to help with the last part.</h5>
+    <p class="lead mt-5 text-center">We're offering an easy and accessible way to offset the greenhouse gas emissions (CO<sub>2</sub>e) from some of your purchases. First, we estimate the emissions produced by your recent purchases, then we provide you with a way to offset them with a couple of clicks.</p>
+</section>
+<section id="carousel" class="container-fluid px-0 mt-5">
+    {% cache None %}
+    <div class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="10000">
+                <img src="../static/images/woodland.jpg" class="d-block w-100" alt="Woodland" style="object-fit: cover; object-position: bottom; height: 700px; max-height: 70vh">
+            </div>
+            <div class="carousel-item" data-bs-interval="10000">
+                <img src="../static/images/peatland.jpg" class="d-block w-100" alt="Peatland" style="object-fit: cover; object-position: top; height: 700px; max-height: 70vh">
+            </div>
+            <div class="carousel-item" data-bs-interval="10000">
+                <img src="../static/images/woodland2.webp" class="d-block w-100" alt="Peatland" style="object-fit: cover; height: 700px; max-height: 70vh">
+            </div>
+            <div class="carousel-item" data-bs-interval="10000">
+                <img src="../static/images/peatland2.jpg" class="d-block w-100" alt="Peatland" style="object-fit: cover; height: 700px; max-height: 70vh">
+            </div>
+            <div class="carousel-item" data-bs-interval="10000">
+                <img src="../static/images/woodland3.jpg" class="d-block w-100" alt="Peatland" style="object-fit: cover; height: 700px; max-height: 70vh">
+            </div>
+            <div class="carousel-item" data-bs-interval="10000">
+                <img src="../static/images/peatland3.jpg" class="d-block w-100" alt="Peatland" style="object-fit: cover; object-position: top; height: 700px; max-height: 70vh">
+            </div>
+        </div>
+    </div>
+    {% endcache %}
+</section>
+<section id="about" class="container mt-2">
+    <h6 class="display-6 pb-2">What are Carbon Credits?</h6>
+    <p class="lead py-2">
+        Many projects around the world are reducing emissions or pulling greenhouse gases out of the atmosphere, we're able to fund some of them by buying Carbon Credits. 
+        These credits represent the amount of CO<sub>2</sub>e that the project is able to reduce or capture, with a single credit usually respresenting a tonne of carbon. 
+        We make things easier by purchasing credits in bulk on behalf of our users, giving you peace of mind with none of the hassle.
+    </p>
+    <h6 class="display-6 py-2 text-center">Are all Credits equal?</h6>
+    <p class="lead pt-2">
+        Carbon Offsetting is a new and booming industry so, unsurprisingly, standards vary.
+        While there are many worthwhile projects reducing emissions in heavily polluting industries we think it's important to actually remove greenhouse gases where possible. 
+        We also believe it's best to do so close to home, that's why we purchase Carbon Credits from projects here in the UK that are certified by the 
+        <a href="https://woodlandcarboncode.org.uk/about/the-basics" class="text-reset" style="text-decoration-color: #458e23;">Woodland Carbon Code</a> or the <a href="https://www.iucn-uk-peatlandprogramme.org/peatland-code/introduction-peatland-code"
+        style="text-decoration-color: #458e23;" class="text-reset">Peatland Carbon Code</a>; these environments naturally capture and store CO<sub>2</sub>, and as an added bonus they also help support biodiversity.
+        It doesn't get much better than that.
+    </p>
+    <p class="lead pb-2">
+        There's another issue: Double Counting. Some cheeky offsetters will sell their Carbon Credits more than once! As each credit represents a specific amount of CO<sub>2</sub>e
+        the resale of these credits means an unlucky customer has not balanced anything with their purchase. We will only buy ours from offsetters who retire serlialised credits,
+        this is done on a global scale using an open ledger (blockchain) which means there can be no cheating. Hooray!
+    </p>
+    <h6 class="display-6 py-2 text-end">How much does it cost?</h6>
+    <p class="lead py-2">
+        The price of a Carbon Credit changes over time which means the amount that it will cost to offset your purchases will also change. The current price is {{ p_per_kg }}p per kg.
+        As well as this there's also a transaction fee of 25p. The final bit of the equation is how much CO<sub>2</sub>e you need to offset; spending a lot in highly polluting sectors
+        will mean that it's more expensive to balance your footprint, while buying less and in greener sectors will, of course, be cheaper.
+    </p>
+</section>
+<!-- End about -->
+<!-- Getting started -->
+<section id="getting-started" class="container-fluid my-5 py-2" style="background-image: linear-gradient(150deg, #330066, #33006694); color: white;">
+    <div class="container">
+        <h4 class="display-4 pt-5 pb-4">Get started<img src="../static/images/runner2.svg" height="50" class="px-4"></h4>
+        <ol class="px-4" style="padding-bottom: 50px;">
+            <li class="p-2 lead">Create an account</li>
+            <form action="/sign-up" method="POST" class="text-center p-2" style="max-width: 600px;">
+                <input class="form-control w-100 m-2" style="background-color: transparent; color: white;" type="text" placeholder="Email" required name="email" maxlength="320" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autocomplete="email">
+                <input id="new-password" class="form-control w-100 m-2" style="background-color: transparent; color: white;" type="password" placeholder="Password" required name="password" maxlength="32" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain 8 or more characters, including a number and an uppercase and lowercase letter." autocomplete="new-password">
+                <input id="confirm-password" class="form-control w-100 m-2" style="background-color: transparent; color: white;" type="password" placeholder="Repeat password" required name="password_repeat" maxlength="32">
+                <button class="btn btn-outline-light" type="submit">Confirm</button>
+            </form>
+            <li class="p-2 lead">Follow the email confirmation link we'll send you</li>
+            {% if current_user.is_authenticated == False %}
+            <li class="p-2 lead"><a class="link-light" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#loginModal">Sign in</a></li>
+            <li class="p-2 lead">Go to your Dashboard</li>
+            {% else %}
+            <li class="p-2 lead">Sign in</li>
+            <li class="p-2 lead">Go to your <a class="link-light" style="cursor: pointer;" href="/dashboard">Dashboard</a></li>
+            {% endif %}
+            <li class="p-2 lead">
+                <button class="btn" style="background-color: #330066; color: white; outline-style: solid; outline-color: white; outline-width: 1px; cursor: default;">Synchronise with Starling</button>
+                to estimate the CO<sub>2</sub>e of your recent transactions
+            </li>
+            <li class="p-2 lead">
+                <a href="" class="btn" style="background-color: #330066; color: white; outline-style: solid; outline-color: white; outline-width: 1px; cursor: default;">Offset outstanding debt</a>
+                to purchase the Carbon Credits which will offset the emissions
+            </li>
+        </ol>
+        
+    </div>
+</section>
+<!-- End getting started -->
+<!-- Contact us -->
+<section id="contact-us" class="container mt-5">
+    <h4 class="display-6 text-center">Contact us</h4>
+    <p class="lead text-center">hello@otato.co.uk</p>
+    <form action="/contact-email" method="post" class="text-center mx-auto" style="max-width: 800px;">
+        <input class="form-control m-2 w-100" type="text" placeholder="Your name" name="name" autocomplete="name" required>
+        <input class="form-control m-2 w-100" type="text" placeholder="Your email" name="email" autocomplete="email" required>
+        <input class="form-control m-2 w-100" type="text" placeholder="Subject" name="subject" autocomplete="off" required>
+        <textarea class="form-control m-2 w-100" type="text" placeholder="Message" name="message" autocomplete="off" rows="4" style="resize: none;" required></textarea>
+        <button type="submit" class="btn btn-primary m-2">Send</button>
+    </form>
+</section>
+<!-- End contact us -->
+<!-- JS -->
+<script>
+    var password = document.getElementById("password"),
+        confirm_password = document.getElementById("confirm-password");
+
+    function validatePassword(){
+    if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords don't match");
+    } else {
+        confirm_password.setCustomValidity('');
+    }
+    }
+
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;                
+</script>
+{% endblock %}

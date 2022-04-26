@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+requests = "*"
+authlib = "*"
+Flask-Session = "*"
+flask-sqlalchemy = "*"
+sqlalchemy = "*"
+bcrypt = "*"
+flask-login = "*"
+flask-paranoid = "*"
+flask-mail = "*"
+pycryptodome = "*"
+cryptography = "*"
+flask-apscheduler = "*"
+tzlocal = "==2.*"
+python-dotenv = "*"
+urllib3 = "==1.22"
+sqlalchemy-utils = "*"
+flask-caching = "*"
+flask-pymongo = "*"
+psycopg2-binary = "*"
+werkzeug = "~=2.0.0"
+psycopg2 = "*"
+waitress = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

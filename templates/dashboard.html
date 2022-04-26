@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: linear-gradient(#fff, #eedcff);
+        background-attachment: fixed;
+    }
+</style>
+<section id="dashboard">
+    <!-- Infographic -->
+    <div class="container overflow-hidden" style="max-width: 700px;">
+        <div class="text-muted fw-lighter fs-6 text-center">Logged in as {{ name.split(' ')[0] }}</div>
+        <div class="row g-2 p-4">
+            <div class="col-6">
+                <div class="p-3 border text-center h-100">
+                    {% if spent_to_date >= carbon_emitted_kg %}
+                    <img src="../static/images/check-circle-fill-green.svg" alt="status" height="100px">
+                    <p class="display-6">Up-to-date</p>
+                    {% else %}
+                    <img src="../static/images/x-circle-fill.svg" alt="status" height="100px" data-bs-toggle="modal" data-bs-target="#catch-up-modal">
+                    <p class="display-6 fst-normal" data-bs-toggle="modal" data-bs-target="#catch-up-modal">Catch up</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 border text-center h-100">
+                    <img src="../static/images/pound-note.svg" alt="kg" height="100px">
+                    <p class="display-6">{{ "£{:,.2f}".format(spent_to_date / 100) }} spent</p>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 border text-center h-100">
+                    <img src="../static/images/co2.svg" alt="kg" height="100px">
+                    <p class="display-6">{{ "~{}kg".format(carbon_emitted_kg) }} emitted</p>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-3 border text-center h-100">
+                    <img src="../static/images/earth.svg" alt="kg" height="100px">
+                    <p class="display-6">{{ "~{}kg".format(carbon_balanced_kg) }} offset</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Options -->
+    <div class="container p-4 d-grid gap-3" style="max-width: 1000px;">
+        {% if webhook_check == false %}
+        <a href="/get-feed" class="btn btn-lg" style="background-color: #330066; color: white;">Synchronise with Starling</a>
+        {% endif %}
+        {% if carbon_emitted_kg > carbon_balanced_kg %}
+            <a href="" class="btn btn-lg" style="background-color: #330066; color: white;" data-bs-toggle="modal" data-bs-target="#catch-up-modal">Offset outstanding debt</a>
+            {% else %}
+            <a href="" class="btn btn-lg disabled" style="background-color: #330066; color: white;">Offset outstanding debt</a>
+        {% endif %}
+        <button class="btn btn-lg" style="background-color: #9e00c5; color: white;" data-bs-toggle="modal" data-bs-target="#top-up-modal">Top up account</button>
+        <!-- {% if webhook_check == true %}
+            <a href="/webhook-switch" class="btn btn-lg" style="background-color: #9e00c5; color: white;">Swap to Manual Offsets</a>
+            {% else %}
+            <a href="/webhook-switch" class="btn btn-lg" style="background-color: #9e00c5; color: white;">Swap to Automatic Offsets</a>
+        {% endif %} -->
+        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Give feedback
+        </button>
+    </div>
+    <!-- Transaction list / user feedback -->
+    <div class="collapse" id="collapseExample">
+        <div class="container text-center" style="max-width: 900px;">
+            <p class="small" style="color: rgb(143, 143, 143);"><i><a data-bs-toggle="tooltip" data-bs-placement="top" title="The feedback is stored without any information that could be used to identify you.">
+                We're always looking to improve; the biggest way you can help us is to let us know what you've purchased. Any information given will be used to
+                inform our estimates and that's it. Nothing else. Because of this any feedback that's been submitted won't appear below. Thanks.</a>
+            </i></p>
+        </div>
+        <div class="container overflow-hidden">
+            <div class="row g-5 row-cols-1 row-cols-xl-2">
+                {% for tx in txs %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header text-end bg-white">
+                            <div name="date" class="lead">{{ tx[6].strftime("%H:%M %A, %d %b '%y") }}</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <h5 name="merchant" class="card-title col-6">{{ tx[4] }}</h5>
+                                <h5 name="amount" class="card-title col-6 text-end">{{ "£{:,.2f}".format(tx[2] / 100) }}</h5>
+                            </div>
+                            <p name="category" class="card-text">{{ (tx[3]).replace('_', ' ').capitalize() }}</p>
+                            <!-- Input -->
+                            <form method="post" action="/add-feedback/{{tx[3]}}/{{tx[0]}}">
+                                <input name='{{tx[0]}}'>
+                                <script>
+                                    var input = document.querySelector('input[name="{{tx[0]}}"]');
+                                    new Tagify(input)
+                                </script>
+                                <div class="text-center pt-3">
+                                    <button role="button" class="btn btn-primary btn-submit" type="submit">Confirm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Catch up modal -->
+<div class="modal fade" id="catch-up-modal" tabindex="-1" aria-labelledby="catch-up-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title display-5 fs-4" id="catch-up-modal-label">Catch up</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/catch-up/{{ catch_up + 25 }}" method="POST">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto fs-5">Offset cost</div>
+                            <span class="fs-5">{{ "£{:,.2f}".format(catch_up / 100) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto fs-5">Fee</div>
+                            <span class="fs-5">£0.25</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto fw-bold fs-5">Total</div>
+                            <span class="fw-bold fs-5">{{ "£{:,.2f}".format((catch_up + 25) / 100) }}</span>
+                        </li>
+                    </ul>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success" type="submit">Make payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Catch up modal end -->
+<!-- Top up modal -->
+<div class="modal fade" id="top-up-modal" tabindex="-1" aria-labelledby="top-up-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title display-5 fs-4" id="top-up-modal-label">Top up</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/top-up" method="POST">
+                    <div class="input-group justify-content-center">
+                        <span for="amount" class="input-group-text fs-3">£</span>
+                        <input name="amount" class="form-control-lg" type="number" placeholder="0.00" pattern="^\d*(\.\d{0,2})?$" min="0.26" step="0.01" required autofocus style="width: 150px;">
+                        <button class="btn btn-success" type="submit">Make payment</button>
+                    </div>
+                    <div class="text-center text-muted fs-6 mt-1">(25p fee included)</div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Top up modal end -->
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: linear-gradient(#fff, #eedcff);
+        background-attachment: fixed;
+    }
+</style>
+<section id="resend-confirmation-email">
+    <div class="container text-center p-5" style="max-width: 600px;">
+        <img src="../static/images/repeat-email-confirmation.svg" alt="Repeat email confirmation icon" style="height: 200px;">
+        <p class="lead">
+            If you haven't received a confirmation email you can request another one below. It may also be worth checking your spam folder.
+        </p>
+        <form action="/confirm-email" method="POST" class="row g-3">
+            <input class="form-control-lg" type="text" placeholder="Email" required name="email" maxlength="320" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" autocomplete="email" autofocus>
+            <br>
+            <button class="btn btn-primary btn-lg" style="background-color: #330066;" type="submit">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

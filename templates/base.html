@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- Tagify -->
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <script src="https://unpkg.com/@yaireo/tagify@3.1.0/dist/tagify.polyfills.min.js"></script>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    
+    <title>carbonGyroscope</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" type="image/x-icon" href="../static/images/carbonGyroscope-badge.svg">
+</head>
+<body class="d-flex flex-column h-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-xxl navbar-light fixed-top" style="background-color: #fdfbff;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="../static/images/carbonGyroscope.svg" alt="logo" style="height: 47px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-start" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="/">Home</a>
+                    </li>
+                    {% if current_user.is_authenticated == True %}
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="/dashboard">Dashboard</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="/#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="/#contact-us">Contact us</a>
+                    </li>
+                    {% if current_user.is_authenticated == False %}
+                    <li class="nav-item">
+                        <a class="nav-link text-center" href="/#getting-started">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link btn" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</button>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-center" style="width: 100%;" href="/logout">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Login modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-image: linear-gradient(#330066, #330066f6); color: white;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Log in</h5>
+                    <button type="button" class="btn-close btn-close-white" style="background-color: white;" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/login" method="POST">
+                        <div class="mb-3 mt-3">
+                            <div class="input-group mb-3 mt-3">
+                                <span class="input-group-text"><img src="../static/images/envelope.svg"></span>
+                                <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="email" autofocus required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><img src="../static/images/key.svg"></span>
+                                <input class="form-control" type="password" placeholder="Password" name="password"  maxlength="32" spellcheck="false" autocorrect="off" autocapitalize="off" autocomplete="current-password" id="current-password" required>
+                                <button id="togglePassword" type="button" class="input-group-text" aria-label="Show password as plain text.">
+                                    <img src="../static/images/eye-slash.svg" id="eye">
+                                </button>
+                            </div>
+                            <div class="mb-3 text-center">
+                                <a href="/forgotten-password" class="fw-light" style="text-decoration: none; color: white;">Forgot your password?</a>
+                            </div>
+                            <button class="btn btn-success btn-submit" style="width: 100%;" type="submit">Login</button>
+                        </div>
+                    </form>
+                    <!-- Toggle password visibility -->
+                    <script>
+                        const togglePassword = document.querySelector("#togglePassword");
+                        const password = document.querySelector("#current-password");
+                        var toggle = true;
+
+                        togglePassword.addEventListener("click", function () {
+                            const type = password.getAttribute("type") === "password" ? "text" : "password";
+                            password.setAttribute("type", type);
+                            //
+                            if (toggle === true) {
+                                document.getElementById("eye").src = "../static/images/eye.svg";
+                            } else {
+                                document.getElementById("eye").src = "../static/images/eye-slash.svg";
+                            }
+                            toggle = !toggle;
+                        });
+                    </script>
+                    <!-- End password visibility -->
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <a href="/sign-up" class="fw-light text-white" style="text-decoration: none;">Dont have an account? Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End login modal -->
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div id="flash" class="alert alert-warning alert-dismissible fade show w-100" role="alert" style="position: fixed; top: 73px; z-index: 10000;">
+                    <div class="text-center ">{{message}}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> 
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!-- Content -->
+    <main class="flex-shrink-0" style="padding-top: 76px;">
+    {% block content %}{% endblock %}
+    </main>
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-transparent text-center">
+        <span class="text-muted small">Copyright © 2022 carbonGyroscope by OTATO® t/a greenPotato. Powered by <a href="https://getbootstrap.com/" title="bootstrap5" target="_blank" class="link-secondary">Bootstrap 5</a>.</span>
+    </footer>
+    <!-- Cookie consent banner -->
+    {% if cookies_check == False %}
+    <div class="offcanvas offcanvas-bottom show"  data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="cookies_consent" aria-labelledby="cookies_consent" style="background-color: #330066; height: min-content;">
+        <div class="container">
+            <div class="offcanvas-body text-white lead px-5">
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="offcanvas-title text-light display-6">Cookies<img src="../static/images/cookie.svg" height="40px" class="ms-3"></h5>
+                        <p>This site uses cookies, by continuing we assume you agree to their use.</p>
+                        <p>If cookies are disabled via your browser you won't be able to log in.</p>
+                    </div>
+                    <div class="col-2 d-flex align-self-center align-self-end">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="offcanvas" aria-label="Close">OK</button>
+                    </div>
+                </div>
+                <!-- <form class="form-check form-switch mt-4 mx-4" action="/cookies" method="post">
+                    <label class="form-check-label" for="cookies">Accept cookies?</label>
+                    <input class="form-check-input" type="checkbox" role="switch" id="cookies" name="cookies" checked>
+                    <button class="btn btn-success ms-5" type="submit" role="button">Confirm</button>
+                </form> -->
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>

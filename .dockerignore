@@ -1,0 +1,10 @@
+.git*
+.sensitive
+app.log
+example_feed.json
+example_webhook.json
+to_do.txt
+database_uris.txt
+Dockerfile
+secrets.json
+secrets_local.json

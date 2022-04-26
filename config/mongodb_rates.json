@@ -1,0 +1,32 @@
+{
+    "BILLS_AND_SERVICES": {
+        "category": "BILLS_AND_SERVICES",
+        "default": 0.0000086
+    },
+    "EATING_OUT": {
+        "category": "EATING_OUT",
+        "default": 0.0035,
+        "Nandos": {
+            "rate": 0.0056,
+            "hit_count": 0
+        }
+    },
+    "FOOD_AND_DRINK": {
+        "category": "FOOD_AND_DRINK"
+    },
+    "GROCERIES": {
+        "category": "GROCERIES",
+        "default": 0.014
+    },
+    "SHOPPING": {
+        "category": "SHOPPING",
+        "default": 0.0029
+    },
+    "TRANSPORT": {
+        "category": "TRANSPORT",
+        "default": 0.017
+    },
+    "TRAVEL": {
+        "category": "TRAVEL"
+    }
+}
